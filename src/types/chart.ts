@@ -26,6 +26,7 @@ export type ChartSpec = {
     y: string[]
     color?: string | null
     size?: string | null
+    value?: string | null   // heatmap cell value (numeric)
     agg?: Aggregation
   }
   filters: Filter[]

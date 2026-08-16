@@ -3,13 +3,14 @@ import { useProfiler } from '@/hooks/useProfiler'
 import { HeaderRowControl } from '@/components/HeaderRowControl'
 import { RecentFiles } from '@/components/RecentFiles'
 import { ProfilePanel } from '@/components/ProfilePanel'
+import { EncoderPanel } from '@/components/EncoderPanel'
 
 export function LeftSidebar() {
   // Recompute profiles whenever phase/sheet/headerRow changes
   useProfiler()
 
   const state = useDatasetStore()
-  const { phase, dataset, activeSheetIndex, recentFiles } = state
+  const { phase, dataset, activeSheetIndex, recentFiles, selectedChartType } = state
   const activeSheet = dataset?.sheets[activeSheetIndex]
   const detectedRow = activeSheet?.detectedHeaderRow ?? 0
   const currentRow = selectHeaderRow(state)
@@ -77,8 +78,15 @@ export function LeftSidebar() {
               onReset={() => state.setHeaderRowOverride(null)}
             />
 
-            {/* Column profile list */}
+            {/* Column profile list — always shown */}
             <ProfilePanel />
+
+            {/* Encoder panel — shown once a chart type has been chosen */}
+            {selectedChartType && (
+              <div style={{ borderTop: '1px solid var(--c-rule)', paddingTop: '14px' }}>
+                <EncoderPanel chartType={selectedChartType} />
+              </div>
+            )}
           </>
         )}
 

@@ -7,7 +7,9 @@
       "Bash(cd \"/Users/lakshithanaranwala/Documents/Graph creator\" && npm install 2>&1)",
       "Bash(cd \"/Users/lakshithanaranwala/Documents/Graph creator\" && npm i https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz 2>&1)",
       "Bash(cd \"/Users/lakshithanaranwala/Documents/Graph creator\" && npm test 2>&1)",
-      "Bash(cd \"/Users/lakshithanaranwala/Documents/Graph creator\" && npm run build 2>&1)"
+      "Bash(cd \"/Users/lakshithanaranwala/Documents/Graph creator\" && npm run build 2>&1)",
+      "Bash(cd \"/Users/lakshithanaranwala/Documents/Graph creator\" && npm test -- --reporter=verbose 2>&1 | tail -30)",
+      "Bash(cd \"/Users/lakshithanaranwala/Documents/Graph creator\" && npm test 2>&1 | tail -15)"
     ]
   }
 }
