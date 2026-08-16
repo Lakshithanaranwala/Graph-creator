@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+/* ── Design tokens ── */
+:root {
+  --c-ink:    #1B2230;
+  --c-ground: #F3F5F7;
+  --c-panel:  #FFFFFF;
+  --c-rule:   #DDE2EA;
+  --c-muted:  #7A8899;
+  --c-accent: #2F6FEB;
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  /* Radius policy */
+  --r-sm:   3px;  /* badges, pills */
+  --r-base: 4px;  /* inputs, buttons */
+  --r-md:   6px;  /* panels, cards */
+  --r-none: 0px;  /* chart canvas frame */
+}
+
+/* ── Base reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--c-ground);
+  color: var(--c-ink);
+  min-height: 100dvh;
+}
+
+/* ── Focus style — visible, not the browser default ring ── */
+:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+  border-radius: var(--r-base);
+}
+
+/* ── Respect reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Typography helpers ── */
+.font-display { font-family: var(--font-display); }
+.font-mono    { font-family: var(--font-mono); }
+
+/* ── App shell responsive layout ──
+   Three-column on desktop, single column stack on mobile.
+   The sidebars become full-width headers/footers below 768 px.       */
+#root > div {
+  display: flex;
+  flex-direction: row;
+}
+
+@media (max-width: 767px) {
+  #root > div {
+    flex-direction: column;
+    height: auto !important;
+    min-height: 100dvh;
+  }
+
+  #root > div > aside {
+    width: 100% !important;
+    min-width: unset !important;
+    border-right: none !important;
+    border-left: none !important;
+    border-bottom: 1px solid var(--c-rule);
+  }
+
+  #root > div > main {
+    flex: 1;
+    min-height: 60dvh;
+    padding: 16px !important;
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"/Users/lakshithanaranwala/Documents/Graph creator\" && npm create vite@latest . -- --template react-ts --yes 2>&1)",
+      "Bash(cd \"/Users/lakshithanaranwala/Documents/Graph creator\" && npm create vite@latest . --template react-ts 2>&1 <<'EOF'\ny\nEOF)",
+      "Bash(cd \"/Users/lakshithanaranwala/Documents/Graph creator\" && echo \"y\" | npm create vite@latest . -- --template react-ts 2>&1)",
+      "Bash(cd \"/Users/lakshithanaranwala/Documents/Graph creator\" && npm install 2>&1)",
+      "Bash(cd \"/Users/lakshithanaranwala/Documents/Graph creator\" && npm i https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz 2>&1)",
+      "Bash(cd \"/Users/lakshithanaranwala/Documents/Graph creator\" && npm test 2>&1)",
+      "Bash(cd \"/Users/lakshithanaranwala/Documents/Graph creator\" && npm run build 2>&1)"
+    ]
+  }
+}
