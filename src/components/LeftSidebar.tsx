@@ -1,11 +1,15 @@
 import { useDatasetStore, selectHeaderRow } from '@/store/datasetStore'
+import { useProfiler } from '@/hooks/useProfiler'
 import { HeaderRowControl } from '@/components/HeaderRowControl'
 import { RecentFiles } from '@/components/RecentFiles'
+import { ProfilePanel } from '@/components/ProfilePanel'
 
 export function LeftSidebar() {
+  // Recompute profiles whenever phase/sheet/headerRow changes
+  useProfiler()
+
   const state = useDatasetStore()
   const { phase, dataset, activeSheetIndex, recentFiles } = state
-
   const activeSheet = dataset?.sheets[activeSheetIndex]
   const detectedRow = activeSheet?.detectedHeaderRow ?? 0
   const currentRow = selectHeaderRow(state)
@@ -42,39 +46,24 @@ export function LeftSidebar() {
 
       <div
         style={{
-          padding: '16px',
+          padding: '12px 14px',
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          gap: '20px',
+          gap: '18px',
         }}
       >
-        {/* Sheet info + header row control when a sheet is active */}
         {phase === 'preview' && activeSheet && (
           <>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              <p
-                style={{
-                  fontSize: '0.72rem',
-                  fontWeight: 600,
-                  letterSpacing: '0.05em',
-                  textTransform: 'uppercase',
-                  color: 'var(--c-muted)',
-                }}
-              >
+            {/* Sheet info */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <p style={{ fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--c-muted)' }}>
                 Active sheet
               </p>
-              <p
-                style={{
-                  fontSize: '0.85rem',
-                  fontWeight: 500,
-                  fontFamily: 'var(--font-mono)',
-                  color: 'var(--c-ink)',
-                }}
-              >
+              <p style={{ fontSize: '0.82rem', fontWeight: 500, fontFamily: 'var(--font-mono)', color: 'var(--c-ink)' }}>
                 {activeSheet.name}
               </p>
-              <p style={{ fontSize: '0.72rem', color: 'var(--c-muted)' }}>
+              <p style={{ fontSize: '0.7rem', color: 'var(--c-muted)' }}>
                 {activeSheet.rawRows.length - detectedRow - 1} rows ·{' '}
                 {activeSheet.rawRows[detectedRow]?.length ?? 0} cols
               </p>
@@ -87,6 +76,9 @@ export function LeftSidebar() {
               onChange={state.setHeaderRowOverride}
               onReset={() => state.setHeaderRowOverride(null)}
             />
+
+            {/* Column profile list */}
+            <ProfilePanel />
           </>
         )}
 
