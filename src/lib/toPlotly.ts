@@ -31,6 +31,37 @@ function tickFmt(values: number[]): string {
   return '.3g'
 }
 
+// ── Legend position helpers ─────────────────────────────────────────────────
+
+type LegendPos = Partial<Layout['legend']>
+
+function legendCoords(pos: string | undefined): LegendPos {
+  switch (pos) {
+    case 'top':
+      return { x: 0.5, y: 1.02, xanchor: 'center', yanchor: 'bottom', orientation: 'h' }
+    case 'bottom':
+      return { x: 0.5, y: -0.22, xanchor: 'center', yanchor: 'top', orientation: 'h' }
+    case 'left':
+      return { x: -0.02, y: 1, xanchor: 'right', yanchor: 'top', orientation: 'v' }
+    case 'top-left':
+      return { x: 0.02, y: 0.98, xanchor: 'left', yanchor: 'top', orientation: 'v' }
+    case 'top-right':
+      return { x: 0.98, y: 0.98, xanchor: 'right', yanchor: 'top', orientation: 'v' }
+    default: // 'right'
+      return { x: 1.02, y: 1, xanchor: 'left', yanchor: 'top', orientation: 'v' }
+  }
+}
+
+/** Extra margin needed so the outside-plot-area legend isn't clipped. */
+function legendMarginExtra(pos: string | undefined): { l?: number; r?: number; t?: number; b?: number } {
+  switch (pos) {
+    case 'top':    return { t: 30 }
+    case 'bottom': return { b: 40 }
+    case 'left':   return { l: 90 }
+    default:       return { r: 100 } // right (outside)
+  }
+}
+
 // ── Layout helpers ─────────────────────────────────────────────────────────
 
 function axisBase(showGrid: boolean): Partial<Layout['xaxis']> {
@@ -84,6 +115,10 @@ function buildLayout(
   const isPie = chartType === 'pie'
   const isHeatmap = chartType === 'heatmap'
 
+  const legendPos = style.legendPosition ?? 'right'
+  const showLegend = style.showLegend
+  const legendExtra = showLegend ? legendMarginExtra(legendPos) : {}
+
   const layout: Partial<Layout> = {
     width: widthPx,
     height: heightPx,
@@ -91,17 +126,18 @@ function buildLayout(
     plot_bgcolor: '#F3F5F7',
     font: { family: 'DM Sans, system-ui, sans-serif', size: 12, color: '#1B2230' },
     margin: {
-      l: isPie || isHeatmap ? 20 : 64,
-      r: 20,
-      t: style.title ? 48 : 24,
-      b: isPie ? 20 : 64,
+      l: (isPie || isHeatmap ? 20 : 64) + (legendExtra.l ?? 0),
+      r: 20 + (legendExtra.r ?? 0),
+      t: (style.title ? 48 : 24) + (legendExtra.t ?? 0),
+      b: (isPie ? 20 : 64) + (legendExtra.b ?? 0),
     },
-    showlegend: style.showLegend && !isPie,
+    showlegend: showLegend && !isPie,
     legend: {
       bgcolor: 'rgba(255,255,255,0.85)',
       bordercolor: '#DDE2EA',
       borderwidth: 1,
       font: { family: 'DM Sans, system-ui, sans-serif', size: 11, color: '#1B2230' },
+      ...legendCoords(legendPos),
     },
   }
 

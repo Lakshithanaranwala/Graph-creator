@@ -1,4 +1,5 @@
 import { StylePanel } from '@/components/StylePanel'
+import { ExportPanel } from '@/components/ExportPanel'
 
 export function RightSidebar() {
   return (
@@ -14,24 +15,44 @@ export function RightSidebar() {
         overflowY: 'auto',
       }}
     >
+      {/* ── Style ─────────────────────────────────────────────────────── */}
       <div
         style={{
-          padding: '16px',
+          padding: '12px 14px',
           borderBottom: '1px solid var(--c-rule)',
           fontFamily: 'var(--font-display)',
           fontWeight: 600,
-          fontSize: '0.8rem',
+          fontSize: '0.78rem',
           letterSpacing: '0.04em',
           textTransform: 'uppercase',
           color: 'var(--c-muted)',
           flexShrink: 0,
         }}
       >
-        Style &amp; export
+        Style
+      </div>
+      <div style={{ padding: '14px', borderBottom: '1px solid var(--c-rule)' }}>
+        <StylePanel />
       </div>
 
-      <div style={{ padding: '14px', flex: 1 }}>
-        <StylePanel />
+      {/* ── Export ────────────────────────────────────────────────────── */}
+      <div
+        style={{
+          padding: '12px 14px',
+          borderBottom: '1px solid var(--c-rule)',
+          fontFamily: 'var(--font-display)',
+          fontWeight: 600,
+          fontSize: '0.78rem',
+          letterSpacing: '0.04em',
+          textTransform: 'uppercase',
+          color: 'var(--c-muted)',
+          flexShrink: 0,
+        }}
+      >
+        Export
+      </div>
+      <div style={{ padding: '14px' }}>
+        <ExportPanel />
       </div>
     </aside>
   )

@@ -1,6 +1,6 @@
 import { useChartStore } from '@/store/chartStore'
 import { PALETTES } from '@/lib/palettes'
-import type { ChartSpec } from '@/types/chart'
+import type { ChartSpec, LegendPosition } from '@/types/chart'
 
 // ── Tiny reusable sub-controls ─────────────────────────────────────────────
 
@@ -328,6 +328,32 @@ export function StylePanel() {
             checked={style.showLegend}
             onChange={(v) => patch({ showLegend: v })}
           />
+        )}
+        {!isPie && style.showLegend && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', paddingLeft: '4px' }}>
+            <label style={{ fontSize: '0.68rem', color: 'var(--c-muted)' }}>Legend position</label>
+            <select
+              value={style.legendPosition ?? 'right'}
+              onChange={(e) => patch({ legendPosition: e.target.value as LegendPosition })}
+              style={{
+                padding: '4px 7px',
+                border: '1px solid var(--c-rule)',
+                borderRadius: 'var(--r-md)',
+                background: 'var(--c-ground)',
+                color: 'var(--c-ink)',
+                fontSize: '0.75rem',
+                fontFamily: 'var(--font-body)',
+                cursor: 'pointer',
+              }}
+            >
+              <option value="right">Right (outside)</option>
+              <option value="left">Left (outside)</option>
+              <option value="top">Top (horizontal)</option>
+              <option value="bottom">Bottom (horizontal)</option>
+              <option value="top-left">Top-left (inside)</option>
+              <option value="top-right">Top-right (inside)</option>
+            </select>
+          </div>
         )}
         {!isPie && (
           <Toggle

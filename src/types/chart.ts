@@ -1,3 +1,5 @@
+export type LegendPosition = 'right' | 'left' | 'top' | 'bottom' | 'top-left' | 'top-right'
+
 export type ChartType =
   | 'bar'
   | 'line'
@@ -45,6 +47,7 @@ export type ChartSpec = {
     yMax?: number
     xLog?: boolean
     yLog?: boolean
+    legendPosition?: LegendPosition
     // Export width in mm — drives the rendered size so WYSIWYG
     widthMm?: number
   }

@@ -87,6 +87,7 @@ export function getSmartDefaults(
       yLabel: yNames[0] ?? valueName ?? '',
       palette: DEFAULT_PALETTE,
       showLegend: true,
+      legendPosition: 'right',
       showGrid: true,
       showDataLabels: false,
       xLog: false,
