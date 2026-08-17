@@ -14,6 +14,7 @@ type AppState = {
   updateColor: (column: string | null) => void
   updateValue: (column: string | null) => void
   updateAgg: (agg: Aggregation) => void
+  updateStyle: (patch: Partial<ChartSpec['style']>) => void
   addFilter: (filter: Filter) => void
   removeFilter: (index: number) => void
   resetSpec: () => void
@@ -60,6 +61,13 @@ export const useChartStore = create<AppState>((set) => ({
     set((s) =>
       s.activeSpec
         ? { activeSpec: { ...s.activeSpec, encodings: { ...s.activeSpec.encodings, agg } } }
+        : s,
+    ),
+
+  updateStyle: (patch) =>
+    set((s) =>
+      s.activeSpec
+        ? { activeSpec: { ...s.activeSpec, style: { ...s.activeSpec.style, ...patch } } }
         : s,
     ),
 

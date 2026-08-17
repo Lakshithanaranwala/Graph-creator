@@ -37,5 +37,15 @@ export type ChartSpec = {
     palette: string
     showLegend: boolean
     showGrid: boolean
+    showDataLabels?: boolean
+    // Manual axis range overrides (undefined = auto)
+    xMin?: number
+    xMax?: number
+    yMin?: number
+    yMax?: number
+    xLog?: boolean
+    yLog?: boolean
+    // Export width in mm — drives the rendered size so WYSIWYG
+    widthMm?: number
   }
 }

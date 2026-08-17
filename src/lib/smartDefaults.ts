@@ -1,6 +1,7 @@
 import type { ColumnProfile } from '@/types/profile'
 import type { ChartType, ChartSpec, Aggregation } from '@/types/chart'
 import { CHART_RULES } from '@/lib/chartRules'
+import { DEFAULT_PALETTE } from '@/lib/palettes'
 
 // Pick the best X column: temporal → low-cardinality categorical/boolean → numeric → any
 function pickBestCol(
@@ -81,9 +82,16 @@ export function getSmartDefaults(
     },
     filters: [],
     style: {
-      palette: 'default',
+      title: '',
+      xLabel: xName ?? '',
+      yLabel: yNames[0] ?? valueName ?? '',
+      palette: DEFAULT_PALETTE,
       showLegend: true,
       showGrid: true,
+      showDataLabels: false,
+      xLog: false,
+      yLog: false,
+      widthMm: 180,
     },
   }
 }

@@ -1,8 +1,6 @@
-type Props = {
-  children?: React.ReactNode
-}
+import { StylePanel } from '@/components/StylePanel'
 
-export function RightSidebar({ children }: Props) {
+export function RightSidebar() {
   return (
     <aside
       aria-label="Style and export controls"
@@ -26,17 +24,14 @@ export function RightSidebar({ children }: Props) {
           letterSpacing: '0.04em',
           textTransform: 'uppercase',
           color: 'var(--c-muted)',
+          flexShrink: 0,
         }}
       >
         Style &amp; export
       </div>
 
-      <div style={{ padding: '16px', flex: 1 }}>
-        {children ?? (
-          <p style={{ color: 'var(--c-muted)', fontSize: '0.8rem' }}>
-            No chart yet.
-          </p>
-        )}
+      <div style={{ padding: '14px', flex: 1 }}>
+        <StylePanel />
       </div>
     </aside>
   )

@@ -1,4 +1,5 @@
 import { useDatasetStore, selectHeaderRow } from '@/store/datasetStore'
+import { useChartStore } from '@/store/chartStore'
 import { useTransformStore } from '@/store/transformStore'
 import { useTransform } from '@/hooks/useTransform'
 import { DropZone } from '@/components/DropZone'
@@ -8,22 +9,22 @@ import { SheetPicker } from '@/components/SheetPicker'
 import { PreviewTable } from '@/components/PreviewTable'
 import { ChartTypePicker } from '@/components/ChartTypePicker'
 import { DownsampleNotice } from '@/components/DownsampleNotice'
+import { PlotlyChart, ChartEmpty, ChartComputing, ChartError } from '@/components/PlotlyChart'
 
 type Props = {
   onFile: (file: File) => void
 }
 
 export function ChartCanvas({ onFile }: Props) {
-  // Run the transform pipeline whenever spec or data changes
   useTransform()
 
   const state = useDatasetStore()
-  const { phase, dataset, activeSheetIndex, parseProgress, parseError } = state
-
+  const { phase, dataset, activeSheetIndex, parseProgress, parseError, selectedChartType } = state
   const activeSheet = dataset?.sheets[activeSheetIndex]
   const headerRow = selectHeaderRow(state)
 
-  const transformResult = useTransformStore((s) => s.result)
+  const spec = useChartStore((s) => s.activeSpec)
+  const { result: transformResult, computing } = useTransformStore()
 
   function handleSheetSelect(index: number) {
     state.setActiveSheetIndex(index)
@@ -35,7 +36,6 @@ export function ChartCanvas({ onFile }: Props) {
     state.reset()
   }
 
-  // Extract downsample info from the transform result if available
   const downsampleInfo =
     transformResult?.ok &&
     transformResult.output.kind === 'xy' &&
@@ -55,7 +55,6 @@ export function ChartCanvas({ onFile }: Props) {
         flexDirection: 'column',
         overflow: 'hidden',
         background: 'var(--c-ground)',
-        // Padding only when the content is a centred invitation (not a table or picker)
         padding: phase === 'preview' ? '0' : '24px',
       }}
     >
@@ -69,10 +68,8 @@ export function ChartCanvas({ onFile }: Props) {
         <SheetPicker sheets={dataset.sheets} onSelect={handleSheetSelect} />
       ) : phase === 'preview' && activeSheet ? (
         <>
-          {/* Chart type picker always shows at the top when data is loaded */}
           <ChartTypePicker />
 
-          {/* Downsample notice — shown when points were reduced */}
           {downsampleInfo && (
             <DownsampleNotice
               totalPoints={downsampleInfo.totalPoints}
@@ -80,10 +77,25 @@ export function ChartCanvas({ onFile }: Props) {
             />
           )}
 
-          {/* Preview table fills the remaining space and scrolls internally */}
-          <div style={{ flex: 1, overflow: 'hidden' }}>
-            <PreviewTable rawRows={activeSheet.rawRows} headerRowIndex={headerRow} />
-          </div>
+          {/* Main area: chart or data preview */}
+          {!selectedChartType ? (
+            // No chart type chosen yet — show the data preview table
+            <div style={{ flex: 1, overflow: 'hidden' }}>
+              <PreviewTable rawRows={activeSheet.rawRows} headerRowIndex={headerRow} />
+            </div>
+          ) : !spec ? (
+            // Chart type chosen but no encodings set yet
+            <ChartEmpty />
+          ) : computing ? (
+            <ChartComputing />
+          ) : transformResult && !transformResult.ok ? (
+            <ChartError message={transformResult.error} />
+          ) : transformResult && transformResult.ok ? (
+            <PlotlyChart output={transformResult.output} spec={spec} />
+          ) : (
+            // spec exists but transform hasn't run yet
+            <ChartEmpty />
+          )}
         </>
       ) : null}
     </main>
